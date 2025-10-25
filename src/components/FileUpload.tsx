@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
 
 interface FileUploadProps {
   onFileSelect: (files: File[]) => void;
@@ -19,6 +19,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateFiles = useCallback(
     (files: File[]): { valid: File[]; errors: string[] } => {
@@ -125,10 +126,11 @@ const FileUpload: React.FC<FileUploadProps> = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onClick={() => document.getElementById("file-input")?.click()}
+        onClick={() => fileInputRef.current?.click()}
       >
         <input
-          id="file-input"
+          // Use a ref instead of a static ID to avoid conflicts
+          ref={fileInputRef}
           type="file"
           accept={accept}
           multiple={multiple}
