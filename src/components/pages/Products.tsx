@@ -27,7 +27,6 @@ const Products: React.FC = () => {
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [_error, setError] = useState<string | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>();
@@ -52,7 +51,6 @@ const Products: React.FC = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      setError(null);
       const [productsData, categoriesData, subcategoriesData] =
         await Promise.all([getProducts(), getCategories(), getSubcategories()]);
       setProducts(productsData);
@@ -61,7 +59,6 @@ const Products: React.FC = () => {
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Mahsulotlarni yuklashda xatolik.";
-      setError(errorMessage);
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -430,14 +427,6 @@ const Products: React.FC = () => {
                               fullProduct
                             );
                             console.log("📁 Files:", fullProduct.files);
-                            console.log(
-                              "📷 Images (legacy):",
-                              fullProduct.images
-                            );
-                            console.log(
-                              "🎥 Videos (legacy):",
-                              fullProduct.videos
-                            );
                             setEditingProduct(fullProduct);
                             setIsModalOpen(true);
                           } catch (err) {

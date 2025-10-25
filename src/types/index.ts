@@ -159,6 +159,7 @@ export interface Product {
   categoryId: string;
   subcategoryId: string;
   countryId?: string;
+  isDeleted?: boolean; // Soft delete flag
   files?: ProductFile[];
   createdAt?: string;
   updatedAt?: string;
