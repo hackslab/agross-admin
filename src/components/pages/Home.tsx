@@ -127,7 +127,7 @@ const Home: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
-        <div className="bg-white p-4 md:p-6 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.1)] flex items-center gap-3 md:gap-4 border border-gray-200 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-[transform,box-shadow] duration-200">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.1)] flex items-center gap-3 md:gap-4 border border-gray-200 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)]">
           <Package className="w-10 h-10 md:w-12 md:h-12 text-teal-700 flex-shrink-0" />
           <div>
             <h3 className="m-0 text-xs md:text-sm text-gray-600 font-medium">
