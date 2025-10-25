@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { toast } from "sonner";
 import type {
   Product,
@@ -163,17 +163,23 @@ const Products: React.FC = () => {
     });
   };
 
-  const getCategoryName = (categoryId: string) => {
-    return (
-      categories.find((cat) => cat.id === categoryId)?.name_uz || "Unknown"
-    );
-  };
+  const getCategoryName = useCallback(
+    (categoryId: string) => {
+      return (
+        categories.find((cat) => cat.id === categoryId)?.name_uz || "Unknown"
+      );
+    },
+    [categories]
+  );
 
-  const getSubcategoryName = (subcategoryId: string) => {
-    return (
-      subcategories.find((sub) => sub.id === subcategoryId)?.name_uz || "-"
-    );
-  };
+  const getSubcategoryName = useCallback(
+    (subcategoryId: string) => {
+      return (
+        subcategories.find((sub) => sub.id === subcategoryId)?.name_uz || "-"
+      );
+    },
+    [subcategories]
+  );
 
   // Filter, search, and sort products
   const filteredProducts = useMemo(() => {
@@ -222,7 +228,15 @@ const Products: React.FC = () => {
     });
 
     return sorted;
-  }, [products, filterCategory, searchTerm, sortBy, sortOrder]);
+  }, [
+    products,
+    filterCategory,
+    searchTerm,
+    sortBy,
+    sortOrder,
+    getCategoryName,
+    getSubcategoryName,
+  ]);
 
   if (isLoading) {
     return (

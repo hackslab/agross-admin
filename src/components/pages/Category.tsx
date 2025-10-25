@@ -21,7 +21,7 @@ const Category: React.FC = () => {
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [_error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
 
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isSubcategoryModalOpen, setIsSubcategoryModalOpen] = useState(false);

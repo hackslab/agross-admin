@@ -191,7 +191,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     setNewFileObjects(new Map());
     setValidationErrors([]);
     setActiveLang("uz");
-  }, [product, isOpen]);
+  }, [product, isOpen, categories, units]);
 
   useEffect(() => {
     if (formData.categoryId) {
@@ -206,7 +206,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
         }));
       }
     }
-  }, [formData.categoryId, subcategories]);
+  }, [formData.categoryId, formData.subcategoryId, subcategories]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
