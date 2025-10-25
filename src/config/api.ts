@@ -4,7 +4,7 @@
  */
 
 export const API_CONFIG = {
-  BASE_URL: "http://192.168.1.48:3000",
+  BASE_URL: import.meta.env.VITE_API_BASE_URL,
   ENDPOINTS: {
     // Admin Authentication
     ADMIN_LOGIN: "/admin/login",
