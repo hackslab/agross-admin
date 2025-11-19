@@ -634,6 +634,7 @@ export async function getProductsByCategory(
  * Create new product
  */
 export async function createProduct(data: Partial<Product>): Promise<Product> {
+  console.log("Creating product with data:", data);
   return apiFetch<Product>(API_CONFIG.ENDPOINTS.PRODUCTS_CREATE, {
     method: "POST",
     body: JSON.stringify(data),
