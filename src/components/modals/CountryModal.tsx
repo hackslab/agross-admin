@@ -122,8 +122,11 @@ const CountryModal: React.FC<CountryModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 flex items-center justify-center z-[1500] p-4"
-      onClick={onClose}
+      className="fixed inset-0 bg-black/70 flex items-center justify-center z-[1600] p-4"
+      onClick={(e) => {
+        e.stopPropagation();
+        onClose();
+      }}
     >
       <div
         className="bg-white rounded-xl w-full max-w-[500px] shadow-[0_8px_32px_rgba(0,0,0,0.2)] border border-gray-200"
