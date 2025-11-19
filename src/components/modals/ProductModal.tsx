@@ -370,14 +370,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
   return (
     <div
       className="fixed inset-0 bg-black/70 flex items-center justify-center z-[1500] p-4"
-      onClick={
-        !isCategoryModalOpen &&
-        !isSubcategoryModalOpen &&
-        !isCountryModalOpen &&
-        !isUnitModalOpen
-          ? onClose
-          : undefined
-      }
+      onClick={undefined}
     >
       <div
         className="bg-white rounded-xl w-full max-w-[800px] max-h-[90vh] overflow-y-auto shadow-[0_8px_32px_rgba(0,0,0,0.2)] border border-gray-200"
@@ -453,12 +446,14 @@ const ProductModal: React.FC<ProductModalProps> = ({
                   type="number"
                   step="0.01"
                   value={formData.price}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const val = parseFloat(e.target.value);
                     setFormData({
                       ...formData,
-                      price: parseFloat(e.target.value),
-                    })
-                  }
+                      price: val < 0 ? 0 : val,
+                    });
+                  }}
+                  min="0"
                   required
                   className={`${inputClass} pl-8`}
                 />
@@ -593,12 +588,14 @@ const ProductModal: React.FC<ProductModalProps> = ({
               <input
                 type="number"
                 value={formData.quantity}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const val = parseInt(e.target.value);
                   setFormData({
                     ...formData,
-                    quantity: parseInt(e.target.value),
-                  })
-                }
+                    quantity: val < 0 ? 0 : val,
+                  });
+                }}
+                min="0"
                 className={inputClass}
               />
             </div>
