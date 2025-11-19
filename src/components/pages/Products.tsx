@@ -19,13 +19,16 @@ import {
   deleteProduct,
   addProductFile,
   updateProductFileOrder,
+  getCurrency,
   ApiError,
 } from "../../services/api";
+import type { Currency } from "../../types";
 
 const Products: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [currency, setCurrency] = useState<Currency | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,11 +54,17 @@ const Products: React.FC = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const [productsData, categoriesData, subcategoriesData] =
-        await Promise.all([getProducts(), getCategories(), getSubcategories()]);
+      const [productsData, categoriesData, subcategoriesData, currencyData] =
+        await Promise.all([
+          getProducts(),
+          getCategories(),
+          getSubcategories(),
+          getCurrency().catch(() => null),
+        ]);
       setProducts(productsData);
       setCategories(categoriesData);
       setSubcategories(subcategoriesData);
+      setCurrency(currencyData);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Mahsulotlarni yuklashda xatolik.";
@@ -128,6 +137,7 @@ const Products: React.FC = () => {
       setEditingProduct(undefined);
       setIsModalOpen(false);
     } catch (err) {
+      console.error("An error occurred during product save:", err);
       if (err instanceof ApiError && err.isValidationError()) {
         // Validation errors will be handled by the modal
         throw err;
@@ -391,8 +401,27 @@ const Products: React.FC = () => {
                   <td className="px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-600">
                     {getSubcategoryName(product.subcategoryId)}
                   </td>
-                  <td className="px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-800 font-semibold whitespace-nowrap">
-                    {product.price.toLocaleString()} so'm
+                  <td className="px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-800 font-semibold">
+                    <div className="flex flex-col gap-0.5">
+                      <div className="text-green-700 font-bold">
+                        ${product.price.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </div>
+                      {currency && (
+                        <div className="text-xs text-gray-500">
+                          {(product.price * currency.sell).toLocaleString(
+                            "uz-UZ",
+                            {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            }
+                          )}{" "}
+                          so'm
+                        </div>
+                      )}
+                    </div>
                   </td>
                   <td className="px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-800">
                     <span

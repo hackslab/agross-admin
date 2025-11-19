@@ -5,6 +5,7 @@ import type {
   Subcategory,
   Unit,
   Country,
+  Currency,
 } from "../../types";
 import {
   ApiError,
@@ -16,6 +17,7 @@ import {
   createSubcategory,
   getCategories as apiGetCategories,
   getSubcategories as apiGetSubcategories,
+  getCurrency,
 } from "../../services/api";
 import { toast } from "sonner";
 import FileUpload from "../FileUpload";
@@ -100,17 +102,20 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const [newItemName, setNewItemName] = useState("");
 
   const [allCategories, setAllCategories] = useState<Category[]>(categories);
+  const [currency, setCurrency] = useState<Currency | null>(null);
 
   // Fetch units and countries on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [unitsData, countriesData] = await Promise.all([
+        const [unitsData, countriesData, currencyData] = await Promise.all([
           getUnits(),
           getCountries(),
+          getCurrency().catch(() => null),
         ]);
         setUnits(unitsData);
         setCountries(countriesData);
+        setCurrency(currencyData);
       } catch (err) {
         console.error("Failed to fetch units/countries:", err);
       }
@@ -224,7 +229,11 @@ const ProductModal: React.FC<ProductModalProps> = ({
           }
         }
       });
-
+      console.log("Submitting product data:", {
+        formData,
+        newFilesToSubmit,
+        allFiles,
+      });
       await onSave(formData, newFilesToSubmit, allFiles);
       onClose();
     } catch (err) {
@@ -434,21 +443,35 @@ const ProductModal: React.FC<ProductModalProps> = ({
             </div>
             <div className="mb-6">
               <label className="block mb-2 text-gray-800 font-medium">
-                Narxi *
+                Narxi (USD) *
               </label>
-              <input
-                type="number"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    price: parseFloat(e.target.value),
-                  })
-                }
-                required
-                className={inputClass}
-              />
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-green-700 font-bold">
+                  $
+                </div>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={formData.price}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      price: parseFloat(e.target.value),
+                    })
+                  }
+                  required
+                  className={`${inputClass} pl-8`}
+                />
+              </div>
+              {currency && formData.price > 0 && (
+                <div className="mt-1 text-xs text-gray-500">
+                  ≈ {(formData.price * currency.sell).toLocaleString("uz-UZ", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  })}{" "}
+                  so'm
+                </div>
+              )}
             </div>
           </div>
 

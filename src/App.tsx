@@ -13,7 +13,9 @@ import Units from "./components/pages/Units";
 import { getAdminProfile, logoutAdmin, tokenManager } from "./services/api";
 
 function App() {
-  const [activeSection, setActiveSection] = useState("home");
+  const [activeSection, setActiveSection] = useState(() => {
+    return localStorage.getItem("activeSection") || "home";
+  });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState("");
@@ -59,6 +61,10 @@ function App() {
 
     validateSession();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("activeSection", activeSection);
+  }, [activeSection]);
 
   const handleLogin = (user: string, isSuperadmin: boolean, id: string) => {
     const role = isSuperadmin ? "superadmin" : "admin";
