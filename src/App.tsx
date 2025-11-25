@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 import { Menu } from "lucide-react";
 import Sidebar from "./components/Sidebar";
 import Login from "./components/Login";
@@ -106,6 +106,18 @@ function App() {
     setUserRole("admin");
     setActiveSection("home");
   };
+
+  useEffect(() => {
+    const handleAuthError = () => {
+      handleLogout();
+      toast.error("Sessiya vaqti tugadi. Iltimos, qayta kiring.");
+    };
+
+    window.addEventListener("auth:unauthorized", handleAuthError);
+    return () => {
+      window.removeEventListener("auth:unauthorized", handleAuthError);
+    };
+  }, []);
 
   const renderContent = () => {
     switch (activeSection) {

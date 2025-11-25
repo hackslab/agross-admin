@@ -174,6 +174,7 @@ async function apiFetch<T>(
         // Clear user data from localStorage
         localStorage.removeItem("username");
         localStorage.removeItem("userRole");
+        window.dispatchEvent(new Event("auth:unauthorized"));
         // Trigger re-login by throwing a specific error
         throw new ApiError(
           401,
@@ -243,6 +244,7 @@ async function apiFetchFormData<T>(
         tokenManager.remove();
         localStorage.removeItem("username");
         localStorage.removeItem("userRole");
+        window.dispatchEvent(new Event("auth:unauthorized"));
         throw new ApiError(
           401,
           errorData?.message || "Sessiya tugadi. Iltimos, qayta kiring.",
